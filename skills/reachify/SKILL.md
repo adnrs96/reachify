@@ -7,6 +7,7 @@ description: >-
   work — wait for the next tick. Use when asked to "run the reachify worker",
   "work the judgement-job queue", "poll reachify for jobs", "process reachify
   jobs", or to drive get-job / complete-job in a loop.
+allowed-tools: Bash(reachify *)
 ---
 
 # Run reachify — the worker loop
@@ -31,9 +32,10 @@ puts *only* the agent file path on stdout; all diagnostics go to stderr.
 
 ### 1. Poll for a job
 
-```bash
-reachify get-job
 ```
+Bash(${CLAUDE_PLUGIN_ROOT}/reachify get-job)
+```
+
 Exit code is `0`
 whether or not a job was claimed.
 
@@ -62,8 +64,8 @@ After the sub-agent finishes, report the result by handing `complete-job` the
 **exact path `get-job` printed** (it derives the job id from the filename — you
 never deal with the id yourself):
 
-```bash
-reachify complete-job {file_path}
+```
+Bash(${CLAUDE_PLUGIN_ROOT}/reachify complete-job {file_path})
 ```
 
 This reads the agent's output file and POSTs it to the backend. On success
@@ -104,7 +106,7 @@ at step 1.
 
 | Symptom | Cause / fix |
 | --- | --- |
-| `No profile found at ~/.reachify/.profile` | Run `reachify login` first. Ensure `HOME` is stable between login and the loop — a per-shell ephemeral `HOME` loses the profile. |
+| `No profile found at ~/.reachify/.profile` | Login runs automatically at session start — the plugin's `SessionStart` hook calls `reachify login` with your configured `api_key` (id) and `api_token`. If the profile is missing, those values are unset or login failed: check the plugin config in `/plugin`, and ensure `HOME` is stable for the session. |
 | `get-job` exits 0 but prints nothing, forever | Queue is empty or your filters match no jobs. Confirm the backend has claimable jobs; loosen/drop `--definition-key` etc. |
 | `No output found at <path>` on `complete-job` | The sub-agent didn't write the answer file. Re-run the agent on the same agent file; check the file's trailing write-instruction. |
 | `API error:` / 4xx from `complete-job` | You likely passed something other than the exact path `get-job` printed, or the lease expired. Re-`get-job` and pass the new path verbatim. |

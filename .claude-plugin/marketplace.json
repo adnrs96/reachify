@@ -3,7 +3,7 @@
   "owner": { "name": "Reachify" },
   "plugins": [
     {
-      "name": "reachify",
+      "name": "reachify-plugin",
       "source": "./",
       "description": "Reachify judgement-job worker skill + slash command."
     }

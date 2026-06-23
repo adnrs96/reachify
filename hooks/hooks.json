@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/bin/reachify login --id \"${user_config.api_key}\" --token \"${user_config.api_token}\" || echo \"reachify-plugin: 'reachify login' failed at SessionStart — verify the api_key/api_token config and the login flags\" >&2"
+          }
+        ]
+      }
+    ]
+  }
+}
