@@ -10,6 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **`SessionStart` now installs the CLI instead of shipping a bundled binary.**
+  The hook runs `hooks/reachify-install.sh` with the version pinned in
+  `hooks/reachify.version`, which downloads + verifies the matching release
+  tarball from `adnrs96/reachify-cli` and symlinks `reachify` onto PATH, then
+  runs `reachify login`. Both the hook and the worker skill now invoke bare
+  `reachify` (resolved from PATH by the installer) rather than a bundled
+  `bin/reachify`.
+
+### Added
+- `hooks/reachify.version` — single source of truth for the pinned CLI version
+  (`0.1.0`). Bump this to roll the worker to a new release.
+
 ## [0.0.5] - 2026-06-23
 
 ### Changed

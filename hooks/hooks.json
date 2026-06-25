@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/bin/reachify login --id \"${user_config.api_key}\" --token \"${user_config.api_token}\" || echo \"reachify-plugin: 'reachify login' failed at SessionStart — verify the api_key/api_token config and the login flags\" >&2"
+            "command": "REACHIFY_VERSION=\"$(tr -d '[:space:]' < \"${CLAUDE_PLUGIN_ROOT}/hooks/reachify.version\")\" bash \"${CLAUDE_PLUGIN_ROOT}/hooks/reachify-install.sh\" 1>&2 && reachify login --id \"${user_config.api_key}\" --token \"${user_config.api_token}\" 1>&2 || echo \"reachify-plugin: SessionStart setup failed — verify api_key/api_token config, network access, and that the installer put 'reachify' on PATH\" >&2"
           }
         ]
       }

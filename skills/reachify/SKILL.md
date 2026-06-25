@@ -10,7 +10,6 @@ description: >-
 allowed-tools:
   - Bash(reachify *)
   - Read(/tmp/.reachify/**)
-  - Read(/tmp/.reachify/**)
   - Write(/tmp/.reachify/**)
 ---
 
@@ -22,8 +21,7 @@ Then the worker uses the file path and spawns off a sub agent via the Agent tool
 execute; the agent writes its judgement to a predefined output path; then
 `complete-job` reads that output and reports it back.
 
-You are using this skill **is** to become that worker. You as the worker: poll, spawn a
-sub-agent on the agent file via the **Agent tool**, and complete the job.
+You are using this skill **is** to become that worker. You as the worker: poll, spawn a sub-agent on the agent file via the **Agent tool**, and complete the job.
 
 ## The loop — one tick (the agent path)
 
@@ -32,7 +30,7 @@ Do exactly this each tick. `get-job` puts *only* the agent file path on stdout; 
 ### 1. Poll for a job
 
 ```
-Bash(${CLAUDE_PLUGIN_ROOT}/bin/reachify get-job)
+Bash(reachify get-job)
 ```
 
 Exit code is `0` whether or not a job was claimed.
@@ -61,7 +59,7 @@ needs is in the file.
 After the sub-agent finishes, report the result by handing `complete-job` the **exact path `get-job` printed**:
 
 ```
-Bash(${CLAUDE_PLUGIN_ROOT}/bin/reachify complete-job {file_path})
+Bash(reachify complete-job {file_path})
 ```
 
 On success stderr prints `completed job <id> (status=completed)` and stdout echoes the answer JSON.
