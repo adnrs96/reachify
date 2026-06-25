@@ -11,13 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- **`SessionStart` now installs the CLI instead of shipping a bundled binary.**
-  The hook runs `hooks/reachify-install.sh` with the version pinned in
-  `hooks/reachify.version`, which downloads + verifies the matching release
-  tarball from `adnrs96/reachify-cli` and symlinks `reachify` onto PATH, then
-  runs `reachify login`. Both the hook and the worker skill now invoke bare
-  `reachify` (resolved from PATH by the installer) rather than a bundled
-  `bin/reachify`.
+- **Setup now installs the CLI instead of shipping a bundled binary, and runs
+  lazily when the worker skill is invoked.** A `PreToolUse` hook matched to the
+  `Skill` tool and gated with `if: "Skill(*reachify*)"` runs
+  `hooks/reachify-install.sh` (version pinned in `hooks/reachify.version`),
+  which downloads + verifies the matching release tarball from
+  `adnrs96/reachify-cli` and symlinks `reachify` onto PATH, then runs
+  `reachify login` — all before the skill executes. Replaces the previous
+  `SessionStart` hook, so the CLI is only installed when the worker is actually
+  used, not on every session. The hook exits 0 (never blocks the skill). Both
+  the hook and the worker skill now invoke bare `reachify` (resolved from PATH
+  by the installer) rather than a bundled `bin/reachify`.
 
 ### Added
 - `hooks/reachify.version` — single source of truth for the pinned CLI version

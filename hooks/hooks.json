@@ -1,11 +1,13 @@
 {
   "hooks": {
-    "SessionStart": [
+    "PreToolUse": [
       {
+        "matcher": "Skill",
         "hooks": [
           {
             "type": "command",
-            "command": "REACHIFY_VERSION=\"$(tr -d '[:space:]' < \"${CLAUDE_PLUGIN_ROOT}/hooks/reachify.version\")\" bash \"${CLAUDE_PLUGIN_ROOT}/hooks/reachify-install.sh\" 1>&2 && reachify login --id \"${user_config.api_key}\" --token \"${user_config.api_token}\" 1>&2 || echo \"reachify-plugin: SessionStart setup failed — verify api_key/api_token config, network access, and that the installer put 'reachify' on PATH\" >&2"
+            "if": "Skill(*reachify*)",
+            "command": "REACHIFY_VERSION=\"$(tr -d '[:space:]' < \"${CLAUDE_PLUGIN_ROOT}/hooks/reachify.version\")\" bash \"${CLAUDE_PLUGIN_ROOT}/hooks/reachify-install.sh\" 1>&2 && reachify login --id \"${user_config.api_key}\" --token \"${user_config.api_token}\" 1>&2 || echo \"reachify-plugin: setup failed before running the skill — verify api_key/api_token config, network access, and that the installer put 'reachify' on PATH\" >&2; exit 0"
           }
         ]
       }
